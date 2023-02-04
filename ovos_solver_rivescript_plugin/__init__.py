@@ -91,7 +91,7 @@ class RivescriptBot:
 
 class RivescriptSolver(AbstractSolver):
     def __init__(self):
-        super().__init__(name="Rivescript")
+        super().__init__(name="Rivescript", priority=96)
         self.brain = RivescriptBot("en-us", self.config)
         self.brain.load_brain()
 

@@ -29,7 +29,7 @@ with open("./version.py", "r", encoding="utf-8") as v:
                 version = line.split("'")[1]
 
 
-PLUGIN_ENTRY_POINT = 'ovos-solver-rivescript-plugin=ovos_solver_rivescript_plugin:AIMLSolver'
+PLUGIN_ENTRY_POINT = 'ovos-solver-rivescript-plugin=ovos_solver_rivescript_plugin:RivescriptSolver'
 setup(
     name='ovos-solver-rivescript-plugin',
     version=version,
@@ -41,7 +41,7 @@ setup(
     packages=['ovos_solver_rivescript_plugin'],
     zip_safe=True,
     keywords='mycroft plugin utterance fallback query',
-    entry_points={'ovos.plugin.solver': PLUGIN_ENTRY_POINT},
+    entry_points={'neon.plugin.solver': PLUGIN_ENTRY_POINT},
     install_requires=required("requirements.txt"),
     long_description=long_description,
     long_description_content_type='text/markdown'

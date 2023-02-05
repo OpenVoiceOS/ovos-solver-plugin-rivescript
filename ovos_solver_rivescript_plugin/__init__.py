@@ -3,16 +3,23 @@ import random
 from datetime import date
 from neon_solvers import AbstractSolver
 from os import listdir, remove as remove_file
-from os.path import dirname, isfile
-from os.path import join, dirname
+from os.path import dirname, isfile, join, dirname, isdir
 from ovos_utils.log import LOG
 from rivescript import RiveScript
 
 
 class RivescriptBot:
+    XDG_PATH = f"{xdg_data_home()}/rivescript"
+    makedirs(XDG_PATH, exist_ok=True)
+
     def __init__(self, lang="en-us", settings=None):
         self.settings = settings or {}
         self.lang = lang
+        xdg_path = f"{self.XDG_PATH}/{lang}"
+        if isdir(xdg_path):
+            self.brain_path = xdg_path
+        else:
+            self.brain_path = f"{dirname(__file__)}/brain/{lang}"
         self.rs = RiveScript()
 
     def load_brain(self):
@@ -54,7 +61,7 @@ class RivescriptBot:
             self.settings["interests"] = "I am interested in all kinds of " \
                                          "things. We can talk about anything."
 
-        self.rs.load_directory(join(dirname(__file__), "brain", self.lang))
+        self.rs.load_directory(self.brain_path)
         self.rs.sort_replies()
         self.rs.set_variable("birthday", self.settings["birthday"])
         self.rs.set_variable("sex", self.settings["sex"])

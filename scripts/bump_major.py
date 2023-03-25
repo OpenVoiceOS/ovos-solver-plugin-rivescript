@@ -2,7 +2,7 @@ import fileinput
 from os.path import join, dirname
 
 
-version_file = join(dirname(dirname(__file__)), "ovos_solver_rivescript", "version.py")
+version_file = join(dirname(dirname(__file__)), "ovos_solver_rivescript_plugin", "version.py")
 version_var_name = "VERSION_MAJOR"
 minor_var_name = "VERSION_MINOR"
 build_var_name = "VERSION_BUILD"

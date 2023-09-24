@@ -1,2 +1,2 @@
 rivescript
-neon_solvers
+ovos-plugin-manager

@@ -1,16 +1,16 @@
 import os
-import random
 from datetime import date
-from neon_solvers import AbstractSolver
-from os import listdir, remove as remove_file
-from os.path import dirname, isfile, join, dirname, isdir
+from os.path import dirname, isdir
+
+from ovos_plugin_manager.templates.solvers import QuestionSolver
 from ovos_utils.log import LOG
+from ovos_utils.xdg_utils import xdg_data_home
 from rivescript import RiveScript
 
 
 class RivescriptBot:
     XDG_PATH = f"{xdg_data_home()}/rivescript"
-    makedirs(XDG_PATH, exist_ok=True)
+    os.makedirs(XDG_PATH, exist_ok=True)
 
     def __init__(self, lang="en-us", settings=None):
         self.settings = settings or {}
@@ -80,7 +80,7 @@ class RivescriptBot:
         self.rs.set_variable("website", self.settings["website"])
         self.rs.set_variable("master", self.settings["master"])
         self.rs.set_variable("interests", self.settings["interests"])
-        self.rs.set_variable("name",  self.settings.get("name", "mycroft"))
+        self.rs.set_variable("name", self.settings.get("name", "mycroft"))
 
         self.rs.set_variable("age", str(date.today().year - 2016))
         # TODO - location from mycroft.conf
@@ -96,9 +96,13 @@ class RivescriptBot:
             LOG.error(e)
 
 
-class RivescriptSolver(AbstractSolver):
-    def __init__(self):
-        super().__init__(name="Rivescript", priority=96, enable_cache=False, enable_tx=True)
+class RivescriptSolver(QuestionSolver):
+    enable_tx = True
+    priority = 96
+
+    def __init__(self, config=None):
+        config = config or {}
+        super().__init__(config)
         self.brain = RivescriptBot("en-us", self.config)
         self.brain.load_brain()
 

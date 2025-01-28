@@ -1,6 +1,7 @@
 import os
 from datetime import date
 from os.path import dirname, isdir
+from typing import Optional
 
 from ovos_plugin_manager.templates.solvers import QuestionSolver
 from ovos_utils.log import LOG
@@ -97,24 +98,33 @@ class RivescriptBot:
 
 
 class RivescriptSolver(QuestionSolver):
-    enable_tx = True
-    priority = 96
-
     def __init__(self, config=None):
-        config = config or {}
-        super().__init__(config)
-        self.brain = RivescriptBot("en-us", self.config)
+        config = config or {"lang": "en-us"}
+        lang = config.get("lang") or "en-us"
+        if lang != "en-us" and lang not in os.listdir(RivescriptBot.XDG_PATH):
+            config["lang"] = lang = "en-us"
+        super().__init__(config, internal_lang=lang, enable_tx=True, priority=96)
+        self.brain = RivescriptBot(lang, self.config)
         self.brain.load_brain()
 
-    # officially exported Solver methods
-    def get_data(self, query, context=None):
-        return {"answer": self.get_spoken_answer(query, context)}
+    def get_spoken_answer(self, query: str,
+                          lang: Optional[str] = None,
+                          units: Optional[str] = None) -> Optional[str]:
+        """
+        Obtain the spoken answer for a given query.
 
-    def get_spoken_answer(self, query, context=None):
+        Args:
+            query (str): The query text.
+            lang (Optional[str]): Optional language code. Defaults to None.
+            units (Optional[str]): Optional units for the query. Defaults to None.
+
+        Returns:
+            str: The spoken answer as a text response.
+        """
         return self.brain.ask_brain(query)
 
 
 if __name__ == "__main__":
     bot = RivescriptSolver()
     print(bot.get_spoken_answer("hello!"))
-    print(bot.spoken_answer("Qual é a tua comida favorita?", {"lang": "pt-pt"}))
+    print(bot.spoken_answer("Qual é a tua comida favorita?", lang="pt-pt"))

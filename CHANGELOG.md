@@ -1,8 +1,12 @@
 # Changelog
 
-## [V0.0.0](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/V0.0.0) (2023-03-25)
+## [0.0.1a1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.1a1) (2025-06-08)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/60be13987c1a71a3f002ea4529c7d825c5aa08dc...V0.0.0)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.0...0.0.1a1)
+
+**Merged pull requests:**
+
+- fix: compatibility with ovos-plugin-manager 1.X.X [\#1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/1) ([JarbasAl](https://github.com/JarbasAl))
 
 
 

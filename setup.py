@@ -56,6 +56,13 @@ setup(
     keywords='mycroft plugin utterance fallback query',
     entry_points={'neon.plugin.solver': PLUGIN_ENTRY_POINT},
     install_requires=required("requirements.txt"),
+    extras_require={
+        "test": [
+            "pytest",
+            "ovoscope",
+            "ovos-persona",
+        ]
+    },
     long_description=long_description,
     long_description_content_type='text/markdown'
 )

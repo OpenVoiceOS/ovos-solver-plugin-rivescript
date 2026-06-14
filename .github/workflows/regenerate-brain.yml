@@ -1,0 +1,49 @@
+# Regenerates ovos_solver_rivescript_plugin/brain/<lang>/generated.rive from
+# locale/<lang>/ whenever locale changes land on dev.
+# Pushing to dev does NOT trigger the release workflow (release_workflow.yml fires
+# only on pull_request closed → dev, not on push), so this commit loop is safe.
+name: Regenerate RiveScript brain
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Regenerate brain files from locale
+        run: |
+          for lang_dir in ovos_solver_rivescript_plugin/locale/*/; do
+            lang=$(basename "$lang_dir")
+            out_dir="ovos_solver_rivescript_plugin/brain/${lang}"
+            mkdir -p "$out_dir"
+            python scripts/locale_to_brain.py rivescript "$lang_dir" "${out_dir}/generated.rive"
+          done
+
+      - name: Commit if changed
+        run: |
+          git config user.name "JarbasAi"
+          git config user.email "jarbasai@mailfence.com"
+          if git diff --quiet -- 'ovos_solver_rivescript_plugin/brain/'; then
+            echo "No brain changes — nothing to commit."
+            exit 0
+          fi
+          git add ovos_solver_rivescript_plugin/brain/
+          git commit -m "chore: regenerate RiveScript brain from locale"
+          git push

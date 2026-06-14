@@ -58,3 +58,16 @@ By default the plugin only supports English (`en-us`).  Setting `enable_tx: true
 **Recommended translate plugin:** `ovos-translate-plugin-server` (the default) or another remote plugin.  Translation plugins may be instantiated multiple times across different personas, so local model plugins that load a large model into memory on each instantiation are costly.  A remote plugin delegates inference to a server and avoids this overhead.
 
 **Default behaviour is unchanged:** with `enable_tx` off (the default), no translator is loaded, the English brain is used, and there is no runtime cost.
+
+## Contributing intents (OVOS locale)
+
+Conversational content lives in `ovos_solver_rivescript_plugin/locale/` as paired
+OVOS intent/dialog files — **not** directly in `.rive` files.  After a PR merges
+to `dev`, a CI workflow automatically regenerates the RiveScript brain.
+
+- **[docs/locale.md](docs/locale.md)** — source-of-truth layout, the `{query}`
+  slot, how to add an intent, how to translate to a new language, and a full table
+  of supported vs. skipped RiveScript constructs.
+- **[docs/converters.md](docs/converters.md)** — the two converter scripts
+  (`brain_to_locale.py`, `locale_to_brain.py`), usage examples, round-trip
+  semantics, and the ~52 % clean-conversion caveat for legacy brain files.

@@ -42,7 +42,7 @@ def get_version():
         version += f"a{alpha}"
     return version
 
-PLUGIN_ENTRY_POINT = 'ovos-solver-rivescript-plugin=ovos_solver_rivescript_plugin:RivescriptSolver'
+PLUGIN_ENTRY_POINT = 'ovos-solver-rivescript-plugin=ovos_solver_rivescript_plugin:RiveScriptChatEngine'
 setup(
     name='ovos-solver-rivescript-plugin',
     version=get_version(),
@@ -52,9 +52,11 @@ setup(
     author_email='jarbasai@mailfence.com',
     license='MIT',
     packages=['ovos_solver_rivescript_plugin'],
+    package_data={'ovos_solver_rivescript_plugin': ['brain/en-us/*.rive']},
+    include_package_data=True,
     zip_safe=True,
     keywords='mycroft plugin utterance fallback query',
-    entry_points={'neon.plugin.solver': PLUGIN_ENTRY_POINT},
+    entry_points={'opm.agents.chat': PLUGIN_ENTRY_POINT},
     install_requires=required("requirements.txt"),
     extras_require={
         "test": [

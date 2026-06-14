@@ -1,9 +1,9 @@
 import os
 from datetime import date
 from os.path import dirname, isdir
-from typing import Optional
+from typing import List, Optional
 
-from ovos_plugin_manager.templates.solvers import QuestionSolver
+from ovos_plugin_manager.templates.agents import AgentMessage, ChatEngine, MessageRole
 from ovos_utils.log import LOG
 from ovos_utils.xdg_utils import xdg_data_home
 from rivescript import RiveScript
@@ -84,11 +84,6 @@ class RivescriptBot:
         self.rs.set_variable("name", self.settings.get("name", "mycroft"))
 
         self.rs.set_variable("age", str(date.today().year - 2016))
-        # TODO - location from mycroft.conf
-        # self.rs.set_variable("location",
-        #                    self.location["city"]["state"]["country"][
-        #                         "name"])
-        # self.rs.set_variable("city", self.location_pretty)
 
     def ask_brain(self, utterance):
         try:
@@ -97,34 +92,29 @@ class RivescriptBot:
             LOG.error(e)
 
 
-class RivescriptSolver(QuestionSolver):
+class RiveScriptChatEngine(ChatEngine):
     def __init__(self, config=None):
         config = config or {"lang": "en-us"}
         lang = config.get("lang") or "en-us"
         if lang != "en-us" and lang not in os.listdir(RivescriptBot.XDG_PATH):
             config["lang"] = lang = "en-us"
-        super().__init__(config, internal_lang=lang, enable_tx=True, priority=96)
+        super().__init__(config)
         self.brain = RivescriptBot(lang, self.config)
         self.brain.load_brain()
 
-    def get_spoken_answer(self, query: str,
-                          lang: Optional[str] = None,
-                          units: Optional[str] = None) -> Optional[str]:
-        """
-        Obtain the spoken answer for a given query.
-
-        Args:
-            query (str): The query text.
-            lang (Optional[str]): Optional language code. Defaults to None.
-            units (Optional[str]): Optional units for the query. Defaults to None.
-
-        Returns:
-            str: The spoken answer as a text response.
-        """
-        return self.brain.ask_brain(query)
+    def continue_chat(self, messages: List[AgentMessage],
+                      session_id: str = "default",
+                      lang: Optional[str] = None,
+                      units: Optional[str] = None) -> AgentMessage:
+        query = next(
+            (m.content for m in reversed(messages) if m.role == MessageRole.USER),
+            ""
+        )
+        answer = self.brain.ask_brain(query) or ""
+        return AgentMessage(role=MessageRole.ASSISTANT, content=answer)
 
 
 if __name__ == "__main__":
-    bot = RivescriptSolver()
-    print(bot.get_spoken_answer("hello!"))
-    print(bot.spoken_answer("Qual é a tua comida favorita?", lang="pt-pt"))
+    engine = RiveScriptChatEngine()
+    msg = engine.continue_chat([AgentMessage(role=MessageRole.USER, content="hello!")])
+    print(msg.content)

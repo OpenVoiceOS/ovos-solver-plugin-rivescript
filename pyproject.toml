@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovos-solver-rivescript-plugin"
+dynamic = ["version"]
+description = "A RiveScript chat agent plugin for ovos/neon/mycroft"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "JarbasAi", email = "jarbasai@mailfence.com"}
+]
+keywords = ["ovos", "plugin", "rivescript", "chat", "persona"]
+requires-python = ">=3.10"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "rivescript",
+    "ovos-plugin-manager>=2.6.1a1,<3.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "ovoscope",
+    "ovos-persona>=0.9.0a3",
+]
+
+[project.urls]
+Homepage = "https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript"
+
+[project.entry-points."opm.agents.chat"]
+"ovos-solver-rivescript-plugin" = "ovos_solver_rivescript_plugin:RiveScriptChatEngine"
+
+[tool.setuptools.dynamic]
+version = {attr = "ovos_solver_rivescript_plugin.version.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ovos_solver_rivescript_plugin*"]
+
+[tool.setuptools.package-data]
+ovos_solver_rivescript_plugin = [
+    "brain/**/*.rive",
+    "locale/**/*",
+]

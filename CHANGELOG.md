@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.2a4](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a4) (2026-08-01)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a3...0.0.2a4)
+
+**Merged pull requests:**
+
+- docs: rewrite README in Simplified Technical English [\#15](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/15) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.0.2a3](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a3) (2025-12-19)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a2...0.0.2a3)

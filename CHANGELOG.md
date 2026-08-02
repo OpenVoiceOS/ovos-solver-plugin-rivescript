@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.2a5](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a5) (2026-08-02)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a4...0.0.2a5)
+
+**Merged pull requests:**
+
+- ci: migrate release workflow to shared OpenVoiceOS automations [\#16](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/16) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.0.2a4](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a4) (2026-08-01)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a3...0.0.2a4)

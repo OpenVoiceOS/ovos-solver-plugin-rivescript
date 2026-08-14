@@ -1,12 +1,22 @@
 import os
 from datetime import date
 from os.path import dirname, isdir
-from typing import Optional
+from typing import List, Optional
 
 from ovos_plugin_manager.templates.solvers import QuestionSolver
 from ovos_utils.log import LOG
 from ovos_utils.xdg_utils import xdg_data_home
 from rivescript import RiveScript
+
+try:
+    from ovos_plugin_manager.templates.agents import ChatEngine, AgentMessage, MessageRole
+except ImportError:
+    # ovos-plugin-manager < 2.2.3a1 does not ship the agents module yet.
+    # The legacy QuestionSolver below still works without it; only the
+    # ChatEngine registration is unavailable on such an old install.
+    ChatEngine = object
+    AgentMessage = None
+    MessageRole = None
 
 
 class RivescriptBot:
@@ -124,7 +134,49 @@ class RivescriptSolver(QuestionSolver):
         return self.brain.ask_brain(query)
 
 
+class RivescriptChatEngine(ChatEngine):
+    """RiveScript chatbot exposed as a modern ChatEngine agent plugin.
+
+    RiveScript is a pattern-matching chatbot: it has no notion of tool
+    calling, so ``tools`` is accepted (callers pass it by keyword) and
+    ignored, and ``supports_tools`` stays at the base default of False.
+    """
+
+    def __init__(self, config=None):
+        config = config or {"lang": "en-us"}
+        lang = config.get("lang") or "en-us"
+        if lang != "en-us" and lang not in os.listdir(RivescriptBot.XDG_PATH):
+            config["lang"] = lang = "en-us"
+        super().__init__(config)
+        self.brain = RivescriptBot(lang, self.config)
+        self.brain.load_brain()
+
+    def continue_chat(self, messages: List["AgentMessage"],
+                      session_id: str = "default",
+                      lang: Optional[str] = None,
+                      units: Optional[str] = None,
+                      tools=None) -> "AgentMessage":
+        """
+        Answer the latest user message via the RiveScript brain.
+
+        RiveScript itself has no concept of chat history beyond the single
+        reply it is asked for, so only the most recent user message is used;
+        earlier turns in ``messages`` are ignored, same as upstream RiveScript
+        usage elsewhere in this plugin.
+        """
+        query = next((m.content for m in reversed(messages)
+                      if m.role == MessageRole.USER), "")
+        if not query:
+            return AgentMessage(role=MessageRole.ASSISTANT, content="")
+        answer = self.brain.ask_brain(query) or ""
+        return AgentMessage(role=MessageRole.ASSISTANT, content=answer)
+
+
 if __name__ == "__main__":
     bot = RivescriptSolver()
     print(bot.get_spoken_answer("hello!"))
     print(bot.spoken_answer("Qual é a tua comida favorita?", lang="pt-pt"))
+
+    chat = RivescriptChatEngine()
+    reply = chat.continue_chat([AgentMessage(role=MessageRole.USER, content="hello!")])
+    print(reply.content)

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.0a2](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.0a2) (2026-08-14)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a5...0.1.0a2)
+
+**Merged pull requests:**
+
+- Migrate to pyproject.toml and register as ChatEngine \(opm.agents.chat\) [\#18](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/18) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.0.2a5](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a5) (2026-08-02)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a4...0.0.2a5)

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1a1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.1a1) (2026-08-15)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.1.0a2...0.1.1a1)
+
+**Merged pull requests:**
+
+- fix: bot identity reflects RiveScript's own origins, not Mycroft or the demo brain [\#22](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/22) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.1.0a2](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.0a2) (2026-08-14)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a5...0.1.0a2)

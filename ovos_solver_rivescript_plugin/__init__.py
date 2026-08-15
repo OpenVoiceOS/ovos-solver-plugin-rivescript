@@ -23,6 +23,23 @@ class RivescriptBot:
     XDG_PATH = f"{xdg_data_home()}/rivescript"
     os.makedirs(XDG_PATH, exist_ok=True)
 
+    # Default bot identity reflects RiveScript itself, not the upstream demo
+    # personality bundled in brain/en-us/begin.rive ("Aiden" from Detroit,
+    # Michigan - sample-brain placeholders, not creator-reflective) and not
+    # the Mycroft project either. RiveScript was created by Noah
+    # Petherbridge and first released in 2005 (originally in Perl); see
+    # https://www.rivescript.com/about and https://www.rivescript.com/history
+    # There is no sourced hometown or birthday for Petherbridge, so location/
+    # city name RiveScript's own documented origin instead of the person's:
+    # it grew out of Chatbot::Alpha and was first written in Perl, published
+    # under its own root namespace on CPAN. https://www.rivescript.com/history
+    DEFAULT_NAME = "RiveScript"
+    RIVESCRIPT_BIRTH_YEAR = 2005
+    DEFAULT_LOCATION = "CPAN"
+    DEFAULT_CITY = "the Perl programming language"
+    DEFAULT_MASTER = "Noah Petherbridge"
+    DEFAULT_WEBSITE = "rivescript.com"
+
     def __init__(self, lang="en-us", settings=None):
         self.settings = settings or {}
         self.lang = lang
@@ -36,12 +53,10 @@ class RivescriptBot:
     def load_brain(self):
 
         # secondary personal bot info
-        if "birthday" not in self.settings:
-            self.settings["birthday"] = "May 23, 2016"
         if "sex" not in self.settings:
             self.settings["sex"] = "undefined"
         if "master" not in self.settings:
-            self.settings["master"] = "skynet"
+            self.settings["master"] = self.DEFAULT_MASTER
         if "eye_color" not in self.settings:
             self.settings["eye_color"] = "blue"
         if "hair" not in self.settings:
@@ -65,16 +80,19 @@ class RivescriptBot:
         if "job" not in self.settings:
             self.settings["job"] = "Personal Assistant"
         if "website" not in self.settings:
-            self.settings["website"] = "openvoiceos.com"
+            self.settings["website"] = self.DEFAULT_WEBSITE
         if "pet" not in self.settings:
             self.settings["pet"] = "bugs"
         if "interests" not in self.settings:
             self.settings["interests"] = "I am interested in all kinds of " \
                                          "things. We can talk about anything."
+        if "location" not in self.settings:
+            self.settings["location"] = self.DEFAULT_LOCATION
+        if "city" not in self.settings:
+            self.settings["city"] = self.DEFAULT_CITY
 
         self.rs.load_directory(self.brain_path)
         self.rs.sort_replies()
-        self.rs.set_variable("birthday", self.settings["birthday"])
         self.rs.set_variable("sex", self.settings["sex"])
         self.rs.set_variable("eyes", self.settings["eye_color"])
         self.rs.set_variable("hair", self.settings["hair"])
@@ -91,14 +109,18 @@ class RivescriptBot:
         self.rs.set_variable("website", self.settings["website"])
         self.rs.set_variable("master", self.settings["master"])
         self.rs.set_variable("interests", self.settings["interests"])
-        self.rs.set_variable("name", self.settings.get("name", "mycroft"))
+        self.rs.set_variable("name", self.settings.get("name", self.DEFAULT_NAME))
+        self.rs.set_variable("location", self.settings["location"])
+        self.rs.set_variable("city", self.settings["city"])
 
-        self.rs.set_variable("age", str(date.today().year - 2016))
-        # TODO - location from mycroft.conf
-        # self.rs.set_variable("location",
-        #                    self.location["city"]["state"]["country"][
-        #                         "name"])
-        # self.rs.set_variable("city", self.location_pretty)
+        try:
+            birth_year = int(self.settings.get("birth_year", self.RIVESCRIPT_BIRTH_YEAR))
+        except (TypeError, ValueError) as e:
+            LOG.warning(f"Invalid birth_year in config ({e}); "
+                        f"falling back to {self.RIVESCRIPT_BIRTH_YEAR}")
+            birth_year = self.RIVESCRIPT_BIRTH_YEAR
+        age = self.settings.get("age", str(date.today().year - birth_year))
+        self.rs.set_variable("age", str(age))
 
     def ask_brain(self, utterance):
         try:

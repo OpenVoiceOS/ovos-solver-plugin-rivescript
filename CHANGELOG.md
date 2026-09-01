@@ -1,12 +1,72 @@
 # Changelog
 
-## [0.0.1a1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.1a1) (2025-06-08)
+## [0.1.1a2](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.1a2) (2026-09-01)
 
-[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.0...0.0.1a1)
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.1.1a1...0.1.1a2)
 
 **Merged pull requests:**
 
-- fix: compatibility with ovos-plugin-manager 1.X.X [\#1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/1) ([JarbasAl](https://github.com/JarbasAl))
+- Add Dockerfile and ghcr publish workflow \(ovos-persona-server\) [\#19](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/19) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.1.1a1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.1a1) (2026-08-15)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.1.0a2...0.1.1a1)
+
+**Merged pull requests:**
+
+- fix: bot identity reflects RiveScript's own origins, not Mycroft or the demo brain [\#22](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/22) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.1.0a2](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.0a2) (2026-08-14)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a5...0.1.0a2)
+
+**Merged pull requests:**
+
+- Migrate to pyproject.toml and register as ChatEngine \(opm.agents.chat\) [\#18](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/18) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.0.2a5](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a5) (2026-08-02)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a4...0.0.2a5)
+
+**Merged pull requests:**
+
+- ci: migrate release workflow to shared OpenVoiceOS automations [\#16](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/16) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.0.2a4](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a4) (2026-08-01)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a3...0.0.2a4)
+
+**Merged pull requests:**
+
+- docs: rewrite README in Simplified Technical English [\#15](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/15) ([JarbasAl](https://github.com/JarbasAl))
+
+## [0.0.2a3](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a3) (2025-12-19)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a2...0.0.2a3)
+
+**Merged pull requests:**
+
+- chore\(deps\): update dependency python to 3.14 [\#6](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/6) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [0.0.2a2](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a2) (2025-12-18)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.2a1...0.0.2a2)
+
+**Merged pull requests:**
+
+- chore: Configure Renovate [\#5](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/5) ([renovate[bot]](https://github.com/apps/renovate))
+
+## [0.0.2a1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.0.2a1) (2025-11-22)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/V0.0.1...0.0.2a1)
+
+**Merged pull requests:**
+
+- Update requirements.txt [\#3](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/3) ([JarbasAl](https://github.com/JarbasAl))
+
+## [V0.0.1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/V0.0.1) (2025-06-08)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.0.1...V0.0.1)
 
 
 

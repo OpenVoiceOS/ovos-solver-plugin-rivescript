@@ -1,17 +1,44 @@
 import os
 from datetime import date
 from os.path import dirname, isdir
-from typing import Optional
+from typing import List, Optional
 
 from ovos_plugin_manager.templates.solvers import QuestionSolver
 from ovos_utils.log import LOG
 from ovos_utils.xdg_utils import xdg_data_home
 from rivescript import RiveScript
 
+try:
+    from ovos_plugin_manager.templates.agents import ChatEngine, AgentMessage, MessageRole
+except ImportError:
+    # ovos-plugin-manager < 2.2.3a1 does not ship the agents module yet.
+    # The legacy QuestionSolver below still works without it; only the
+    # ChatEngine registration is unavailable on such an old install.
+    ChatEngine = object
+    AgentMessage = None
+    MessageRole = None
+
 
 class RivescriptBot:
     XDG_PATH = f"{xdg_data_home()}/rivescript"
     os.makedirs(XDG_PATH, exist_ok=True)
+
+    # Default bot identity reflects RiveScript itself, not the upstream demo
+    # personality bundled in brain/en-us/begin.rive ("Aiden" from Detroit,
+    # Michigan - sample-brain placeholders, not creator-reflective) and not
+    # the Mycroft project either. RiveScript was created by Noah
+    # Petherbridge and first released in 2005 (originally in Perl); see
+    # https://www.rivescript.com/about and https://www.rivescript.com/history
+    # There is no sourced hometown or birthday for Petherbridge, so location/
+    # city name RiveScript's own documented origin instead of the person's:
+    # it grew out of Chatbot::Alpha and was first written in Perl, published
+    # under its own root namespace on CPAN. https://www.rivescript.com/history
+    DEFAULT_NAME = "RiveScript"
+    RIVESCRIPT_BIRTH_YEAR = 2005
+    DEFAULT_LOCATION = "CPAN"
+    DEFAULT_CITY = "the Perl programming language"
+    DEFAULT_MASTER = "Noah Petherbridge"
+    DEFAULT_WEBSITE = "rivescript.com"
 
     def __init__(self, lang="en-us", settings=None):
         self.settings = settings or {}
@@ -26,12 +53,10 @@ class RivescriptBot:
     def load_brain(self):
 
         # secondary personal bot info
-        if "birthday" not in self.settings:
-            self.settings["birthday"] = "May 23, 2016"
         if "sex" not in self.settings:
             self.settings["sex"] = "undefined"
         if "master" not in self.settings:
-            self.settings["master"] = "skynet"
+            self.settings["master"] = self.DEFAULT_MASTER
         if "eye_color" not in self.settings:
             self.settings["eye_color"] = "blue"
         if "hair" not in self.settings:
@@ -55,16 +80,19 @@ class RivescriptBot:
         if "job" not in self.settings:
             self.settings["job"] = "Personal Assistant"
         if "website" not in self.settings:
-            self.settings["website"] = "openvoiceos.com"
+            self.settings["website"] = self.DEFAULT_WEBSITE
         if "pet" not in self.settings:
             self.settings["pet"] = "bugs"
         if "interests" not in self.settings:
             self.settings["interests"] = "I am interested in all kinds of " \
                                          "things. We can talk about anything."
+        if "location" not in self.settings:
+            self.settings["location"] = self.DEFAULT_LOCATION
+        if "city" not in self.settings:
+            self.settings["city"] = self.DEFAULT_CITY
 
         self.rs.load_directory(self.brain_path)
         self.rs.sort_replies()
-        self.rs.set_variable("birthday", self.settings["birthday"])
         self.rs.set_variable("sex", self.settings["sex"])
         self.rs.set_variable("eyes", self.settings["eye_color"])
         self.rs.set_variable("hair", self.settings["hair"])
@@ -81,14 +109,18 @@ class RivescriptBot:
         self.rs.set_variable("website", self.settings["website"])
         self.rs.set_variable("master", self.settings["master"])
         self.rs.set_variable("interests", self.settings["interests"])
-        self.rs.set_variable("name", self.settings.get("name", "mycroft"))
+        self.rs.set_variable("name", self.settings.get("name", self.DEFAULT_NAME))
+        self.rs.set_variable("location", self.settings["location"])
+        self.rs.set_variable("city", self.settings["city"])
 
-        self.rs.set_variable("age", str(date.today().year - 2016))
-        # TODO - location from mycroft.conf
-        # self.rs.set_variable("location",
-        #                    self.location["city"]["state"]["country"][
-        #                         "name"])
-        # self.rs.set_variable("city", self.location_pretty)
+        try:
+            birth_year = int(self.settings.get("birth_year", self.RIVESCRIPT_BIRTH_YEAR))
+        except (TypeError, ValueError) as e:
+            LOG.warning(f"Invalid birth_year in config ({e}); "
+                        f"falling back to {self.RIVESCRIPT_BIRTH_YEAR}")
+            birth_year = self.RIVESCRIPT_BIRTH_YEAR
+        age = self.settings.get("age", str(date.today().year - birth_year))
+        self.rs.set_variable("age", str(age))
 
     def ask_brain(self, utterance):
         try:
@@ -124,7 +156,49 @@ class RivescriptSolver(QuestionSolver):
         return self.brain.ask_brain(query)
 
 
+class RivescriptChatEngine(ChatEngine):
+    """RiveScript chatbot exposed as a modern ChatEngine agent plugin.
+
+    RiveScript is a pattern-matching chatbot: it has no notion of tool
+    calling, so ``tools`` is accepted (callers pass it by keyword) and
+    ignored, and ``supports_tools`` stays at the base default of False.
+    """
+
+    def __init__(self, config=None):
+        config = config or {"lang": "en-us"}
+        lang = config.get("lang") or "en-us"
+        if lang != "en-us" and lang not in os.listdir(RivescriptBot.XDG_PATH):
+            config["lang"] = lang = "en-us"
+        super().__init__(config)
+        self.brain = RivescriptBot(lang, self.config)
+        self.brain.load_brain()
+
+    def continue_chat(self, messages: List["AgentMessage"],
+                      session_id: str = "default",
+                      lang: Optional[str] = None,
+                      units: Optional[str] = None,
+                      tools=None) -> "AgentMessage":
+        """
+        Answer the latest user message via the RiveScript brain.
+
+        RiveScript itself has no concept of chat history beyond the single
+        reply it is asked for, so only the most recent user message is used;
+        earlier turns in ``messages`` are ignored, same as upstream RiveScript
+        usage elsewhere in this plugin.
+        """
+        query = next((m.content for m in reversed(messages)
+                      if m.role == MessageRole.USER), "")
+        if not query:
+            return AgentMessage(role=MessageRole.ASSISTANT, content="")
+        answer = self.brain.ask_brain(query) or ""
+        return AgentMessage(role=MessageRole.ASSISTANT, content=answer)
+
+
 if __name__ == "__main__":
     bot = RivescriptSolver()
     print(bot.get_spoken_answer("hello!"))
     print(bot.spoken_answer("Qual é a tua comida favorita?", lang="pt-pt"))
+
+    chat = RivescriptChatEngine()
+    reply = chat.continue_chat([AgentMessage(role=MessageRole.USER, content="hello!")])
+    print(reply.content)

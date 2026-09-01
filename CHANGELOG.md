@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1a2](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.1a2) (2026-09-01)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.1.1a1...0.1.1a2)
+
+**Merged pull requests:**
+
+- Add Dockerfile and ghcr publish workflow \(ovos-persona-server\) [\#19](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/19) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.1.1a1](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.1a1) (2026-08-15)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.1.0a2...0.1.1a1)

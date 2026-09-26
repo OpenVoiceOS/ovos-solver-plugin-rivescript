@@ -1,0 +1,6 @@
+{
+  "name": "rivescript-bot",
+  "solvers": [
+    "ovos-solver-rivescript-plugin"
+  ]
+}

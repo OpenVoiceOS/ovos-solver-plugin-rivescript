@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovos-solver-rivescript-plugin"
+dynamic = ["readme", "version"]
+description = "A question solver plugin for ovos/neon/mycroft"
+authors = [{ name = "JarbasAi", email = "jarbasai@mailfence.com" }]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+keywords = ["mycroft", "plugin", "utterance", "fallback", "query", "rivescript"]
+
+dependencies = [
+    "rivescript",
+    "ovos-plugin-manager>=2.6.1a1,<3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript"
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0.0,<9",
+    "pytest-timeout>=2.0.0",
+]
+
+[project.entry-points."opm.agents.chat"]
+"ovos-solver-rivescript-plugin" = "ovos_solver_rivescript_plugin:RivescriptChatEngine"
+
+[project.entry-points."neon.plugin.solver"]
+"ovos-solver-rivescript-plugin" = "ovos_solver_rivescript_plugin:RivescriptSolver"
+
+[tool.setuptools]
+packages = ["ovos_solver_rivescript_plugin"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+ovos_solver_rivescript_plugin = ["brain/**"]
+
+[tool.setuptools.dynamic]
+readme = { file = "README.md", content-type = "text/markdown" }
+version = { attr = "ovos_solver_rivescript_plugin.version.__version__" }
+
+[tool.pytest.ini_options]
+testpaths = ["test"]

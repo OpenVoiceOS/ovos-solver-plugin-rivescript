@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1a3](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.1a3) (2026-09-26)
+
+[Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.1.1a2...0.1.1a3)
+
+**Merged pull requests:**
+
+- Update python Docker tag to v3.14 [\#24](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/pull/24) ([renovate[bot]](https://github.com/apps/renovate))
+
 ## [0.1.1a2](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/tree/0.1.1a2) (2026-09-01)
 
 [Full Changelog](https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript/compare/0.1.1a1...0.1.1a2)

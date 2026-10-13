@@ -5,7 +5,7 @@
 # ovos-persona-server with a single persona ("rivescript-bot") that is
 # configured to use this plugin as its solver, so the image is a ready
 # OpenAI-compatible chat endpoint over RiveScript.
-FROM python:3.14-slim
+FROM python:3.15-slim
 
 RUN useradd -m -u 1000 ovos
 

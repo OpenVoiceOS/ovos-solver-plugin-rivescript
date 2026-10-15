@@ -21,7 +21,7 @@ Homepage = "https://github.com/OpenVoiceOS/ovos-solver-plugin-rivescript"
 
 [project.optional-dependencies]
 test = [
-    "pytest>=7.0.0,<9",
+    "pytest>=9.1.1,<10",
     "pytest-timeout>=2.0.0",
 ]
 
